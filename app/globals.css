@@ -486,6 +486,10 @@ body.cursor-fx-active { cursor: none; }
   50%  { opacity: 1;   transform: scale(1.35); }
   100% { opacity: .5;  transform: scale(1); }
 }
+@keyframes touchHeartPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
 @keyframes hintPulse {
   0%, 100% { opacity: .45; }
   50%      { opacity: .9; }
@@ -526,7 +530,7 @@ body.cursor-fx-active { cursor: none; }
   }
   .eyebrow, .title-line, .finale-char, .days-block, .heart-svg, .halo, .hero { opacity: 1 !important; }
   .cursor-glow, .cursor-trail, .cursor-dot, .cursor-burst,
-  .touch-glow, .touch-dot, .touch-trail { display: none !important; }
+  .touch-glow, .touch-heart, .touch-trail { display: none !important; }
   .surprise-overlay { display: none !important; }
   .scene .hero, .scene .heart-stage { opacity: 1 !important; visibility: visible !important; }
   body { cursor: auto; }
@@ -539,7 +543,7 @@ body.cursor-fx-active { cursor: none; }
 
 /* Effets au doigt (mobile) — même esprit que le curseur desktop */
 .touch-glow,
-.touch-dot,
+.touch-heart,
 .touch-trail {
   display: none;
 }
@@ -564,19 +568,23 @@ body.cursor-fx-active { cursor: none; }
     will-change: transform, opacity;
   }
   .touch-glow.is-active { opacity: 1; }
-  .touch-dot {
+  .touch-heart {
     display: block;
     position: fixed; top: 0; left: 0;
-    width: 14px; height: 14px;
-    border-radius: 50%;
+    line-height: 1;
     pointer-events: none;
     z-index: 7;
-    background: #fff;
-    box-shadow: 0 0 10px #fff, 0 0 18px var(--glow), 0 0 32px var(--glow2);
     opacity: 0;
-    transition: opacity .25s ease;
+    transition: opacity .2s ease;
     transform: translate3d(-200px, -200px, 0) translate(-50%, -50%);
     will-change: transform;
   }
-  .touch-dot.is-active { opacity: 1; }
+  .touch-heart.is-active { opacity: 1; }
+  .touch-heart-icon {
+    display: block;
+    font-size: 28px;
+    color: var(--neon);
+    text-shadow: 0 0 10px #fff, 0 0 18px var(--glow), 0 0 32px var(--glow2);
+    animation: touchHeartPulse var(--pulse-duration) ease-in-out infinite;
+  }
 }

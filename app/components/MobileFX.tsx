@@ -15,7 +15,7 @@ export default function MobileFX() {
   const burstRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
+  const heartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -25,8 +25,8 @@ export default function MobileFX() {
     const burst = burstRef.current;
     const trail = trailRef.current;
     const glow = glowRef.current;
-    const dot = dotRef.current;
-    if (!burst || !trail || !glow || !dot) return;
+    const heart = heartRef.current;
+    if (!burst || !trail || !glow || !heart) return;
 
     let pressTimer: ReturnType<typeof setTimeout> | null = null;
     let pressX = 0;
@@ -58,7 +58,11 @@ export default function MobileFX() {
       lastY = pressY;
 
       glow.classList.add("is-active");
-      dot.classList.add("is-active");
+      heart.classList.add("is-active");
+
+      tx = pressX;
+      ty = pressY;
+      heart.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
 
       spawnBurst(burst, pressX, pressY);
 
@@ -79,7 +83,7 @@ export default function MobileFX() {
     const onUp = (e: PointerEvent) => {
       if (e.pointerType === "touch") {
         glow.classList.remove("is-active");
-        dot.classList.remove("is-active");
+        heart.classList.remove("is-active");
       }
       clearPress();
     };
@@ -90,7 +94,7 @@ export default function MobileFX() {
       tx = pointer.x;
       ty = pointer.y;
 
-      dot.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
+      heart.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`;
 
       const dx = tx - lastX;
       const dy = ty - lastY;
@@ -129,7 +133,9 @@ export default function MobileFX() {
       <div ref={glowRef} className="touch-glow" aria-hidden="true" />
       <div ref={trailRef} className="touch-trail" aria-hidden="true" />
       <div ref={burstRef} className="cursor-burst" aria-hidden="true" />
-      <div ref={dotRef} className="touch-dot" aria-hidden="true" />
+      <div ref={heartRef} className="touch-heart" aria-hidden="true">
+        <span className="touch-heart-icon">♥</span>
+      </div>
     </>
   );
 }
