@@ -9,7 +9,6 @@ export const siteConfig = {
   burstCooldownMs: 300,
   openGraph: {
     title: "I love u",
-    description: "Une page romantique, néon et animée — rien que pour toi.",
   },
 };
 

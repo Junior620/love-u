@@ -7,13 +7,11 @@ const siteUrl = new URL(siteConfig.url);
 export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: siteConfig.openGraph.title,
-  description: siteConfig.openGraph.description,
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: siteConfig.openGraph.title,
-    description: siteConfig.openGraph.description,
     url: siteConfig.url,
     siteName: siteConfig.openGraph.title,
     type: "website",
@@ -22,7 +20,6 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: siteConfig.openGraph.title,
-    description: siteConfig.openGraph.description,
   },
 };
 
