@@ -95,7 +95,7 @@ git push -u origin main
 
 1. Va sur [vercel.com/new](https://vercel.com/new)
 2. Importe le dépôt GitHub
-3. Vercel détecte Next.js automatiquement (`vercel.json` force `pnpm`)
+3. Vercel détecte Next.js automatiquement (`vercel.json` utilise `npm`)
 4. Clique **Deploy** (aucune variable d'environnement obligatoire)
 
 ### 3. Configurer le domaine `gabrielle.goldenbeans.com`
