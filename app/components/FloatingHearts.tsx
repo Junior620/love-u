@@ -16,8 +16,7 @@ export default function FloatingHearts({ hearts }: Props) {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const fine = window.matchMedia("(pointer: fine)").matches;
-    if (reduce || !fine) return;
+    if (reduce) return;
 
     const container = containerRef.current;
     if (!container) return;
@@ -27,6 +26,8 @@ export default function FloatingHearts({ hearts }: Props) {
     const offsets = wraps.map(() => ({ x: 0, y: 0 }));
 
     return subscribeFrame((pointer) => {
+      if (!pointer.finePointer && !pointer.touching) return;
+
       const { x: tx, y: ty } = pointer;
 
       for (let i = 0; i < wraps.length; i++) {

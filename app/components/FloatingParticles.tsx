@@ -25,8 +25,10 @@ export default function FloatingParticles({ particles }: Props) {
     const offsets = wraps.map(() => ({ x: 0, y: 0 }));
 
     return subscribeFrame((pointer) => {
-      const { x: tx, y: ty, active } = pointer;
-      if (!active) return;
+      if (!pointer.active) return;
+      if (!pointer.finePointer && !pointer.touching) return;
+
+      const { x: tx, y: ty } = pointer;
 
       for (let i = 0; i < wraps.length; i++) {
         const wrap = wraps[i];

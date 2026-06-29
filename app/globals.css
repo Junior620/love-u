@@ -525,13 +525,58 @@ body.cursor-fx-active { cursor: none; }
     transition-duration: .001ms !important;
   }
   .eyebrow, .title-line, .finale-char, .days-block, .heart-svg, .halo, .hero { opacity: 1 !important; }
-  .cursor-glow, .cursor-trail, .cursor-dot, .cursor-burst { display: none !important; }
+  .cursor-glow, .cursor-trail, .cursor-dot, .cursor-burst,
+  .touch-glow, .touch-dot, .touch-trail { display: none !important; }
   .surprise-overlay { display: none !important; }
   .scene .hero, .scene .heart-stage { opacity: 1 !important; visibility: visible !important; }
   body { cursor: auto; }
 }
-/* Pas de souris (tactile) : on masque les effets de curseur */
+/* Pas de souris (tactile) : curseur desktop masqué, effets touch dédiés */
 @media (pointer: coarse) {
   .cursor-glow, .cursor-trail, .cursor-dot { display: none !important; }
   body { cursor: auto; }
+}
+
+/* Effets au doigt (mobile) — même esprit que le curseur desktop */
+.touch-glow,
+.touch-dot,
+.touch-trail {
+  display: none;
+}
+@media (pointer: coarse) {
+  .touch-trail { position: fixed; inset: 0; z-index: 6; pointer-events: none; display: block; }
+  .touch-glow {
+    display: block;
+    position: fixed; top: 0; left: 0;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    mix-blend-mode: screen;
+    background: radial-gradient(circle,
+      rgba(255, 79, 154, .3) 0%,
+      rgba(177, 76, 255, .18) 38%,
+      transparent 70%);
+    filter: blur(6px);
+    opacity: 0;
+    transition: opacity .35s ease;
+    transform: translate3d(-200px, -200px, 0) translate(-50%, -50%);
+    will-change: transform, opacity;
+  }
+  .touch-glow.is-active { opacity: 1; }
+  .touch-dot {
+    display: block;
+    position: fixed; top: 0; left: 0;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 7;
+    background: #fff;
+    box-shadow: 0 0 10px #fff, 0 0 18px var(--glow), 0 0 32px var(--glow2);
+    opacity: 0;
+    transition: opacity .25s ease;
+    transform: translate3d(-200px, -200px, 0) translate(-50%, -50%);
+    will-change: transform;
+  }
+  .touch-dot.is-active { opacity: 1; }
 }

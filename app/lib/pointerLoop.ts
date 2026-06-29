@@ -3,6 +3,7 @@ export type PointerState = {
   y: number;
   active: boolean;
   finePointer: boolean;
+  touching: boolean;
 };
 
 type PointerCallback = (state: PointerState) => void;
@@ -13,6 +14,7 @@ const state: PointerState = {
   y: 0,
   active: false,
   finePointer: false,
+  touching: false,
 };
 
 const pointerSubs = new Set<PointerCallback>();
@@ -29,7 +31,10 @@ function updateParallaxVars() {
   let mx: number;
   let my: number;
 
-  if (state.finePointer && state.active) {
+  const useFinger =
+    state.active && (state.finePointer || state.touching);
+
+  if (useFinger) {
     mx = (state.x / window.innerWidth) * 2 - 1;
     my = (state.y / window.innerHeight) * 2 - 1;
   } else {
@@ -103,6 +108,10 @@ function ensureListeners() {
     state.x = e.clientX;
     state.y = e.clientY;
 
+    if (e.pointerType === "touch") {
+      state.touching = true;
+    }
+
     if (!state.active) {
       state.active = true;
       if (state.finePointer) {
@@ -113,8 +122,17 @@ function ensureListeners() {
     for (const cb of pointerSubs) cb(state);
   };
 
+  const onUp = (e: PointerEvent) => {
+    if (e.pointerType === "touch") {
+      state.touching = false;
+    }
+    for (const cb of pointerSubs) cb(state);
+  };
+
   window.addEventListener("pointermove", onPointer, { passive: true });
   window.addEventListener("pointerdown", onPointer, { passive: true });
+  window.addEventListener("pointerup", onUp, { passive: true });
+  window.addEventListener("pointercancel", onUp, { passive: true });
 
   if (!state.finePointer) {
     window.addEventListener("pointerdown", () => requestGyroPermission(), {

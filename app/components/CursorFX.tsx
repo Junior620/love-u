@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { subscribePointer, subscribeFrame } from "../lib/pointerLoop";
 import { spawnBurst } from "../lib/burst";
+import { spawnTrail } from "../lib/trail";
 
 /**
  * Effets liés au curseur de la souris (desktop uniquement) :
@@ -29,28 +30,9 @@ export default function CursorFX() {
     let gy = window.innerHeight / 2;
     let lastX = gx;
     let lastY = gy;
-    let count = 0;
+    let count = { n: 0 };
     let tx = gx;
     let ty = gy;
-
-    const spawn = (x: number, y: number) => {
-      const s = document.createElement("span");
-      const isHeart = count++ % 3 === 0;
-      s.className = "trail " + (isHeart ? "trail-heart" : "trail-spark");
-      if (isHeart) s.textContent = "♥";
-
-      const ox = (Math.random() - 0.5) * 16;
-      const oy = (Math.random() - 0.5) * 16;
-      s.style.setProperty("--sc", (0.6 + Math.random() * 0.7).toFixed(2));
-      s.style.setProperty("--dx", `${((Math.random() - 0.5) * 30).toFixed(1)}px`);
-      s.style.setProperty("--dy", `${(-20 - Math.random() * 30).toFixed(1)}px`);
-      s.style.left = `${x + ox}px`;
-      s.style.top = `${y + oy}px`;
-
-      trail.appendChild(s);
-      s.addEventListener("animationend", () => s.remove());
-      window.setTimeout(() => s.remove(), 1200);
-    };
 
     const unsubPointer = subscribePointer((pointer) => {
       tx = pointer.x;
@@ -66,7 +48,7 @@ export default function CursorFX() {
       const dx = tx - lastX;
       const dy = ty - lastY;
       if (dx * dx + dy * dy > 22 * 22) {
-        spawn(tx, ty);
+        spawnTrail(trail, tx, ty, count);
         lastX = tx;
         lastY = ty;
       }
